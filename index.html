@@ -3,360 +3,282 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blueprint Design System - Building Blocks, Not Buildings</title>
-  <meta name="description" content="Interactive explainer for the Blueprint Design System component philosophy">
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- React -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  
-  <!-- Babel for JSX -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  
+  <title>Blueprint Design System - Interactive Explainer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
   <style>
-    body { margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    #root { min-height: 100vh; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   </style>
 </head>
 <body>
   <div id="root"></div>
-  
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    const slides = [
-      {
-        id: 'title',
-        title: 'Blueprint Design System',
-        subtitle: 'Building Blocks, Not Buildings',
-        content: null,
-        bg: 'linear-gradient(135deg, #005A78 0%, #003D52 100%)',
-        textColor: 'white'
-      },
-      {
-        id: 'core',
-        title: 'The Core Concept',
-        subtitle: null,
-        content: (
-          <div className="bg-gray-50 border-l-4 border-orange-500 p-8 rounded-r-lg">
-            <p className="text-2xl font-semibold text-gray-900 mb-2">Blueprint is a box of LEGO bricks,</p>
-            <p className="text-2xl font-semibold text-gray-900 mb-4">not a catalog of finished models.</p>
-            <p className="text-gray-600">We build things <strong>WITH</strong> these components—we don't build custom components <strong>FOR</strong> every layout.</p>
-          </div>
-        ),
-        bg: 'white',
-        textColor: '#005A78'
-      },
-      {
-        id: 'lego',
-        title: 'Think Like a LEGO Builder',
-        subtitle: null,
-        content: <LegoDemo />,
-        bg: 'white',
-        textColor: '#005A78'
-      },
-      {
-        id: 'is',
-        title: '✓ What Blueprint IS',
-        subtitle: null,
-        content: (
-          <div className="space-y-4">
-            {[
-              'Tested, accessible atoms & molecules',
-              'Design tokens for consistent styling',
-              'Components with states pre-built (hover, focus, disabled)',
-              'Building blocks meant to be assembled',
-              'Shared vocabulary for design & development'
-            ].map((item, i) => (
-              <div key={i} className="flex items-center gap-4">
-                <div className="w-3 h-3 rounded-full bg-green-600 flex-shrink-0" />
-                <p className="text-lg text-gray-900">{item}</p>
-              </div>
-            ))}
-          </div>
-        ),
-        bg: 'white',
-        textColor: '#2E7D32'
-      },
-      {
-        id: 'isnt',
-        title: "✗ What Blueprint ISN'T",
-        subtitle: null,
-        content: (
-          <div className="space-y-4">
-            {[
-              'A catalog of every possible layout',
-              'Custom components for every unique design',
-              'Pre-assembled pages or templates',
-              'A replacement for design thinking',
-              'An excuse to skip composition work'
-            ].map((item, i) => (
-              <div key={i} className="flex items-center gap-4">
-                <div className="w-3 h-3 rounded-full bg-red-600 flex-shrink-0" />
-                <p className="text-lg text-gray-900">{item}</p>
-              </div>
-            ))}
-          </div>
-        ),
-        bg: 'white',
-        textColor: '#C62828'
-      },
-      {
-        id: 'atomic',
-        title: 'Atomic Design Levels',
-        subtitle: null,
-        content: <AtomicDiagram />,
-        bg: 'white',
-        textColor: '#005A78'
-      },
-      {
-        id: 'question',
-        title: 'The Key Question',
-        subtitle: '"Am I asking for a different LAYOUT or a different COMPONENT?"',
-        content: (
-          <div className="flex gap-6 mt-8">
-            <div className="flex-1 bg-white/10 rounded-lg p-6 border-l-4 border-green-500">
-              <p className="text-green-400 font-bold mb-2">Different LAYOUT</p>
-              <p className="text-white/90 text-sm">Expected! Assemble from existing components. This IS design work.</p>
-            </div>
-            <div className="flex-1 bg-white/10 rounded-lg p-6 border-l-4 border-orange-500">
-              <p className="text-orange-400 font-bold mb-2">Different COMPONENT</p>
-              <p className="text-white/90 text-sm">Needs new interaction pattern? Let's run it through intake.</p>
-            </div>
-          </div>
-        ),
-        bg: 'linear-gradient(135deg, #005A78 0%, #003D52 100%)',
-        textColor: 'white'
-      },
-      {
-        id: 'checklist',
-        title: 'Before Requesting a New Component',
-        subtitle: null,
-        content: (
-          <div className="space-y-5">
-            {[
-              { num: 1, title: 'Is this solving a recurring problem?', sub: 'If one-time, experiment locally first.' },
-              { num: 2, title: 'Can existing components fit this?', sub: 'Often yes, with creative assembly.' },
-              { num: 3, title: 'Can this be reused elsewhere?', sub: 'Single-use = not for shared system.' },
-              { num: 4, title: 'Is the effort worth the impact?', sub: 'High effort / low impact = defer.' }
-            ].map((item) => (
-              <div key={item.num} className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-cyan-700 text-white flex items-center justify-center font-bold flex-shrink-0">{item.num}</div>
-                <div>
-                  <p className="font-semibold text-gray-900">{item.title}</p>
-                  <p className="text-sm text-gray-500">{item.sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        ),
-        bg: 'white',
-        textColor: '#005A78'
-      },
-      {
-        id: 'closing',
-        title: 'The design system gives you the vocabulary.',
-        subtitle: 'You write the story.',
-        content: (
-          <div className="bg-white/10 rounded-lg p-6 mt-8">
-            <p className="text-white/90 text-center italic text-lg">Assembly IS design work—it's not a limitation, it's the craft.</p>
-          </div>
-        ),
-        bg: 'linear-gradient(135deg, #005A78 0%, #003D52 100%)',
-        textColor: 'white'
-      }
-    ];
+    const colors = {
+      primary: '#0c79a8',
+      primaryDark: '#185a7d',
+      primaryLight: '#00a1e0',
+      accent: '#f2fafe',
+      neutral100: '#f8f9fa',
+      neutral200: '#e7e6e5',
+      neutral500: '#4a4f55',
+      neutral700: '#1c1f22',
+      success: '#00875a',
+      error: '#b70900',
+      white: '#ffffff'
+    };
 
-    function LegoDemo() {
-      const [assembled, setAssembled] = useState(false);
-      
-      return (
-        <div className="flex items-center justify-center gap-8">
-          <div className="flex-1 bg-gray-50 rounded-xl p-6 text-center">
-            <div className="flex flex-wrap gap-3 justify-center mb-4">
-              <div className="w-12 h-6 bg-cyan-700 rounded" />
-              <div className="w-8 h-8 bg-orange-500 rounded" />
-              <div className="w-14 h-5 bg-green-600 rounded" />
-              <div className="w-10 h-7 bg-cyan-700 rounded" />
-              <div className="w-12 h-5 bg-red-500 rounded" />
+    const LegoBlock = ({ color, width = 60, height = 30, label }) => (
+      <div style={{
+        width, height, backgroundColor: color, borderRadius: 4,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: colors.white, fontSize: 10, fontWeight: 600,
+        boxShadow: '0 2px 4px rgba(0,0,0,0.2)', position: 'relative'
+      }}>
+        <div style={{
+          position: 'absolute', top: -6, left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', gap: 4
+        }}>
+          <div style={{ width: 10, height: 6, backgroundColor: color, borderRadius: '4px 4px 0 0', filter: 'brightness(1.1)' }} />
+          <div style={{ width: 10, height: 6, backgroundColor: color, borderRadius: '4px 4px 0 0', filter: 'brightness(1.1)' }} />
+        </div>
+        {label}
+      </div>
+    );
+
+    const TitleSlide = () => (
+      <div style={{ textAlign: 'center', padding: 32 }}>
+        <div style={{ fontSize: 12, color: colors.primary, fontWeight: 600, marginBottom: 12, letterSpacing: 2 }}>BLUEPRINT DESIGN SYSTEM</div>
+        <h1 style={{ fontSize: 28, fontWeight: 700, color: colors.neutral700, marginBottom: 16, lineHeight: 1.2 }}>Building Blocks,<br/>Not Buildings</h1>
+        <p style={{ fontSize: 14, color: colors.neutral500, maxWidth: 320, margin: '0 auto' }}>An interactive guide to understanding how Blueprint works</p>
+        <div style={{ marginTop: 24, display: 'flex', justifyContent: 'center', gap: 8 }}>
+          <LegoBlock color={colors.primary} label="Button" />
+          <LegoBlock color={colors.primaryLight} label="Input" />
+          <LegoBlock color={colors.primaryDark} label="Icon" />
+        </div>
+      </div>
+    );
+
+    const LegoAnalogySlide = () => (
+      <div style={{ textAlign: 'center', padding: 32 }}>
+        <div style={{ backgroundColor: colors.accent, padding: 20, borderRadius: 12, maxWidth: 400, margin: '0 auto', border: `2px solid ${colors.primary}` }}>
+          <div style={{ fontSize: 36, marginBottom: 8 }}>🧱</div>
+          <p style={{ fontSize: 16, fontWeight: 600, color: colors.neutral700, lineHeight: 1.5 }}>"Blueprint is a box of LEGO bricks, not a catalog of finished models."</p>
+        </div>
+        <p style={{ marginTop: 20, fontSize: 13, color: colors.neutral500, maxWidth: 360, margin: '20px auto 0' }}>We provide tested, accessible components. You assemble them into the experiences your users need.</p>
+      </div>
+    );
+
+    const LegoBuilderSlide = ({ legoStep, setLegoStep }) => (
+      <div style={{ padding: 24 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.neutral700, textAlign: 'center', marginBottom: 20 }}>Think Like a LEGO Builder</h2>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 20 }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
+              <LegoBlock color={colors.primary} width={60} label="Button" />
+              <LegoBlock color={colors.primaryLight} width={80} label="Input" />
+              <LegoBlock color={colors.primaryDark} width={45} label="Icon" />
+              <LegoBlock color={colors.success} width={70} label="Label" />
             </div>
-            <p className="font-semibold text-cyan-700">Standard Pieces</p>
-            <p className="text-sm text-gray-500">Same bricks, unlimited possibilities</p>
+            <p style={{ marginTop: 10, fontWeight: 600, color: colors.neutral500, fontSize: 11 }}>Components</p>
           </div>
-          
-          <button 
-            onClick={() => setAssembled(!assembled)}
-            className="text-4xl text-orange-500 hover:scale-125 transition-transform cursor-pointer bg-transparent border-none"
-          >
-            →
-          </button>
-          
-          <div className="flex-1 bg-gray-50 rounded-xl p-6 text-center">
-            <div className="flex flex-col items-center gap-1 mb-4">
-              {assembled ? (
-                <>
-                  <div className="w-24 h-5 bg-cyan-700 rounded" />
-                  <div className="flex gap-1">
-                    <div className="w-11 h-10 bg-orange-500 rounded" />
-                    <div className="w-11 h-10 bg-green-600 rounded" />
-                  </div>
-                  <div className="w-24 h-4 bg-cyan-700 rounded" />
-                </>
+          <div onClick={() => setLegoStep((prev) => (prev + 1) % 2)} style={{ cursor: 'pointer', fontSize: 24, color: colors.primary, userSelect: 'none' }}>➡️</div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ backgroundColor: colors.neutral100, padding: 12, borderRadius: 8, border: `2px dashed ${legoStep === 1 ? colors.success : colors.neutral200}`, transition: 'all 0.3s', minWidth: 120 }}>
+              {legoStep === 0 ? (
+                <p style={{ color: colors.neutral500, fontSize: 11 }}>Click arrow<br/>to assemble</p>
               ) : (
-                <div className="h-20 flex items-center justify-center text-gray-400">
-                  Click arrow to assemble →
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'center' }}>
+                  <LegoBlock color={colors.success} width={70} height={16} label="Label" />
+                  <LegoBlock color={colors.primaryLight} width={100} height={22} label="Search Input" />
+                  <LegoBlock color={colors.primary} width={60} height={22} label="Submit" />
                 </div>
               )}
             </div>
-            <p className="font-semibold text-cyan-700">Your Design</p>
-            <p className="text-sm text-gray-500">Assembly is the creative work</p>
+            <p style={{ marginTop: 10, fontWeight: 600, color: legoStep === 1 ? colors.success : colors.neutral500, fontSize: 11 }}>{legoStep === 1 ? 'Search Form! ✓' : 'Your Layout'}</p>
           </div>
         </div>
-      );
-    }
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 11, color: colors.neutral500 }}>Same blocks → infinite possibilities</p>
+      </div>
+    );
 
-    function AtomicDiagram() {
-      const levels = [
-        { name: 'Atoms', bgClass: 'bg-cyan-100', pillClass: 'bg-cyan-700', textColor: '#005A78', examples: ['Button', 'Input', 'Label'] },
-        { name: 'Molecules', bgClass: 'bg-orange-100', pillClass: 'bg-orange-500', textColor: '#ED7800', examples: ['Search Form', 'Dropdown'] },
-        { name: 'Organisms', bgClass: 'bg-green-100', pillClass: 'bg-green-600', textColor: '#2E7D32', examples: ['Header', 'Toolbar'] },
-        { name: 'Pages', bgClass: 'bg-purple-100', pillClass: 'bg-purple-600', textColor: '#7B1FA2', examples: ['Dashboard', 'Settings'] }
-      ];
-      
-      return (
-        <div className="flex items-stretch gap-2">
-          {levels.map((level, i) => (
-            <div key={level.name} className="flex items-center gap-2">
-              <div className={`flex-1 ${level.bgClass} rounded-lg p-4`}>
-                <p className="text-sm font-bold uppercase tracking-wide mb-1" style={{color: level.textColor}}>{level.name}</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {level.examples.map(ex => (
-                    <span key={ex} className={`${level.pillClass} text-white text-xs px-2 py-1 rounded`}>{ex}</span>
-                  ))}
-                </div>
-              </div>
-              {i < levels.length - 1 && <span className="text-orange-500 text-xl">→</span>}
+    const WhatItIsSlide = () => (
+      <div style={{ padding: 24 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.success, textAlign: 'center', marginBottom: 16 }}>✓ What Blueprint IS</h2>
+        <div style={{ maxWidth: 360, margin: '0 auto' }}>
+          {['Tested, accessible atoms & molecules', 'Design tokens for consistent styling', 'Components with states pre-built', 'Building blocks meant to be assembled', 'Shared vocabulary for design & dev'].map((item, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', backgroundColor: i % 2 === 0 ? colors.accent : colors.white, borderRadius: 6, marginBottom: 4 }}>
+              <div style={{ width: 22, height: 22, backgroundColor: colors.success, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.white, fontWeight: 700, fontSize: 11, flexShrink: 0 }}>{i + 1}</div>
+              <span style={{ fontSize: 13, color: colors.neutral700 }}>{item}</span>
             </div>
           ))}
         </div>
-      );
-    }
+      </div>
+    );
+
+    const WhatItIsntSlide = () => (
+      <div style={{ padding: 24 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.error, textAlign: 'center', marginBottom: 16 }}>✗ What Blueprint ISN'T</h2>
+        <div style={{ maxWidth: 360, margin: '0 auto' }}>
+          {["A catalog of every possible layout", "Custom components for each design", "Pre-assembled pages or templates", "A replacement for design thinking", "An excuse to skip composition work"].map((item, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', backgroundColor: i % 2 === 0 ? '#fef2f2' : colors.white, borderRadius: 6, marginBottom: 4 }}>
+              <div style={{ width: 22, height: 22, backgroundColor: colors.error, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.white, fontWeight: 700, fontSize: 11, flexShrink: 0 }}>✗</div>
+              <span style={{ fontSize: 13, color: colors.neutral700 }}>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    const AtomicLevelsSlide = () => (
+      <div style={{ padding: 24 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.neutral700, textAlign: 'center', marginBottom: 16 }}>Atomic Design Levels</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 400, margin: '0 auto' }}>
+          {[
+            { level: 'Atoms', desc: 'Basic building blocks', examples: 'Buttons, inputs, labels, icons', color: colors.primary },
+            { level: 'Molecules', desc: 'Atoms working together', examples: 'Search form, dropdown, toggle', color: colors.primaryLight },
+            { level: 'Organisms', desc: 'Complex, reusable sections', examples: 'Headers, toolbars, tables', color: colors.primaryDark }
+          ].map((item, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'stretch', backgroundColor: colors.white, borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 6px rgba(0,0,0,0.08)' }}>
+              <div style={{ width: 80, backgroundColor: item.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.white, fontWeight: 700, fontSize: 12 }}>{item.level}</div>
+              <div style={{ padding: 10, flex: 1 }}>
+                <div style={{ fontWeight: 600, color: colors.neutral700, marginBottom: 2, fontSize: 12 }}>{item.desc}</div>
+                <div style={{ fontSize: 10, color: colors.neutral500 }}>{item.examples}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 4, color: colors.neutral500, fontSize: 12 }}>⚛️ → 🧬 → 🦠 → 📄 → 🖥️</div>
+          <p style={{ fontSize: 10, color: colors.neutral500, marginTop: 4 }}>Atoms → Molecules → Organisms → Templates → Pages</p>
+        </div>
+      </div>
+    );
+
+    const KeyQuestionSlide = () => (
+      <div style={{ padding: 24, textAlign: 'center' }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.neutral700, marginBottom: 8 }}>The Key Question</h2>
+        <p style={{ fontSize: 12, color: colors.neutral500, marginBottom: 16 }}>When something feels "missing," ask yourself:</p>
+        <div style={{ backgroundColor: colors.accent, padding: 16, borderRadius: 10, border: `2px solid ${colors.primary}`, marginBottom: 20 }}>
+          <p style={{ fontSize: 14, fontWeight: 600, color: colors.neutral700, fontStyle: 'italic' }}>"Am I asking for a different <span style={{ color: colors.primaryLight }}>LAYOUT</span> or a different <span style={{ color: colors.primary }}>COMPONENT</span>?"</p>
+        </div>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+          <div style={{ flex: 1, maxWidth: 180, padding: 12, backgroundColor: '#e8f5e9', borderRadius: 8, border: `2px solid ${colors.success}` }}>
+            <div style={{ fontWeight: 700, color: colors.success, marginBottom: 4, fontSize: 11 }}>Different LAYOUT →</div>
+            <p style={{ fontSize: 10, color: colors.neutral700 }}>Expected! Assemble from what we have. <strong>This IS design work.</strong></p>
+          </div>
+          <div style={{ flex: 1, maxWidth: 180, padding: 12, backgroundColor: colors.accent, borderRadius: 8, border: `2px solid ${colors.primary}` }}>
+            <div style={{ fontWeight: 700, color: colors.primary, marginBottom: 4, fontSize: 11 }}>Different COMPONENT →</div>
+            <p style={{ fontSize: 10, color: colors.neutral700 }}>New interaction pattern? Let's run it through intake.</p>
+          </div>
+        </div>
+      </div>
+    );
+
+    const ChecklistSlide = () => (
+      <div style={{ padding: 24 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.neutral700, textAlign: 'center', marginBottom: 16 }}>Before Requesting a New Component</h2>
+        <div style={{ maxWidth: 380, margin: '0 auto' }}>
+          {[
+            { q: 'Is this solving a recurring problem?', hint: 'If not, experiment locally' },
+            { q: 'Can existing components fit this?', hint: 'Often yes, with assembly' },
+            { q: 'Can this be reused elsewhere?', hint: 'Single-use = not for shared system' },
+            { q: 'Is the effort worth the impact?', hint: 'High effort / low impact = defer' }
+          ].map((item, i) => (
+            <div key={i} style={{ display: 'flex', gap: 10, padding: 12, backgroundColor: colors.white, borderRadius: 8, marginBottom: 6, boxShadow: '0 2px 6px rgba(0,0,0,0.05)', border: `1px solid ${colors.neutral200}` }}>
+              <div style={{ width: 24, height: 24, backgroundColor: colors.primary, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.white, fontWeight: 700, fontSize: 12, flexShrink: 0 }}>{i + 1}</div>
+              <div>
+                <div style={{ fontWeight: 600, color: colors.neutral700, marginBottom: 2, fontSize: 12 }}>{item.q}</div>
+                <div style={{ fontSize: 10, color: colors.neutral500, fontStyle: 'italic' }}>{item.hint}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    const ClosingSlide = () => (
+      <div style={{ textAlign: 'center', padding: 24 }}>
+        <div style={{ backgroundColor: colors.primary, padding: 20, borderRadius: 12, maxWidth: 380, margin: '0 auto', color: colors.white }}>
+          <p style={{ fontSize: 16, fontWeight: 600, lineHeight: 1.5, marginBottom: 10 }}>"The design system gives you the vocabulary. You write the story."</p>
+          <p style={{ fontSize: 12, opacity: 0.9 }}>Assembly IS design work — it's not a limitation, it's the craft.</p>
+        </div>
+        <div style={{ marginTop: 24 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 10 }}>
+            <LegoBlock color={colors.primary} width={36} height={18} />
+            <LegoBlock color={colors.primaryLight} width={36} height={18} />
+            <LegoBlock color={colors.primaryDark} width={36} height={18} />
+            <LegoBlock color={colors.success} width={36} height={18} />
+          </div>
+          <p style={{ fontSize: 11, color: colors.neutral500 }}>Questions? Contact the Design System Team</p>
+        </div>
+      </div>
+    );
 
     function BlueprintExplainer() {
       const [currentSlide, setCurrentSlide] = useState(0);
-      const [autoPlay, setAutoPlay] = useState(false);
-      
-      useEffect(() => {
-        if (autoPlay) {
-          const timer = setInterval(() => {
-            setCurrentSlide(prev => (prev + 1) % slides.length);
-          }, 5000);
-          return () => clearInterval(timer);
-        }
-      }, [autoPlay]);
+      const [isAutoPlay, setIsAutoPlay] = useState(false);
+      const [legoStep, setLegoStep] = useState(0);
 
-      // Keyboard navigation
+      const totalSlides = 9;
+      const slideNames = ['Intro', 'LEGO Analogy', 'Builder Demo', 'What It IS', "What It ISN'T", 'Atomic Levels', 'Key Question', 'Checklist', 'Closing'];
+
       useEffect(() => {
-        const handleKeyDown = (e) => {
-          if (e.key === 'ArrowRight' || e.key === ' ') {
-            e.preventDefault();
-            setCurrentSlide(prev => Math.min(slides.length - 1, prev + 1));
-          } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            setCurrentSlide(prev => Math.max(0, prev - 1));
-          }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-      }, []);
-      
-      const slide = slides[currentSlide];
-      
+        let interval;
+        if (isAutoPlay) {
+          interval = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % totalSlides);
+          }, 5000);
+        }
+        return () => clearInterval(interval);
+      }, [isAutoPlay]);
+
+      const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
+      const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+
+      const slides = [
+        <TitleSlide key="0" />,
+        <LegoAnalogySlide key="1" />,
+        <LegoBuilderSlide key="2" legoStep={legoStep} setLegoStep={setLegoStep} />,
+        <WhatItIsSlide key="3" />,
+        <WhatItIsntSlide key="4" />,
+        <AtomicLevelsSlide key="5" />,
+        <KeyQuestionSlide key="6" />,
+        <ChecklistSlide key="7" />,
+        <ClosingSlide key="8" />
+      ];
+
       return (
-        <div 
-          className="w-full min-h-screen flex flex-col transition-all duration-500"
-          style={{ background: slide.bg }}
-        >
-          {/* Main content */}
-          <div className="flex-1 flex flex-col justify-center p-8 md:p-12 max-w-4xl mx-auto w-full">
-            {slide.id === 'title' ? (
-              <div className="text-center">
-                <div className="w-20 h-1.5 bg-orange-500 mx-auto mb-8" />
-                <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: slide.textColor }}>{slide.title}</h1>
-                <p className="text-xl md:text-2xl opacity-90" style={{ color: slide.textColor }}>{slide.subtitle}</p>
-                <div className="w-20 h-1.5 bg-orange-500 mx-auto mt-8" />
-                <p className="text-sm opacity-50 mt-12" style={{ color: slide.textColor }}>Press → or click Next to begin</p>
-              </div>
-            ) : slide.id === 'closing' ? (
-              <div className="text-center">
-                <div className="w-20 h-1.5 bg-orange-500 mx-auto mb-8" />
-                <h1 className="text-2xl md:text-3xl font-semibold mb-3" style={{ color: slide.textColor }}>{slide.title}</h1>
-                <p className="text-2xl md:text-3xl font-semibold text-orange-500">{slide.subtitle}</p>
-                {slide.content}
-                <p className="text-sm opacity-50 mt-12" style={{ color: slide.textColor }}>Questions? Contact the Design System Team</p>
-              </div>
-            ) : (
-              <>
-                <h1 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: slide.textColor }}>{slide.title}</h1>
-                {slide.subtitle && <p className="text-lg md:text-xl mb-6 opacity-80" style={{ color: slide.textColor }}>{slide.subtitle}</p>}
-                <div className="mt-4">{slide.content}</div>
-              </>
-            )}
+        <div style={{ backgroundColor: colors.neutral100, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ backgroundColor: colors.white, padding: '8px 16px', borderBottom: `1px solid ${colors.neutral200}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontWeight: 700, color: colors.primary, fontSize: 13 }}>Blueprint Design System</div>
+            <button onClick={() => setIsAutoPlay(!isAutoPlay)} style={{ padding: '6px 12px', backgroundColor: isAutoPlay ? colors.primary : colors.white, color: isAutoPlay ? colors.white : colors.primary, border: `2px solid ${colors.primary}`, borderRadius: 6, fontWeight: 600, cursor: 'pointer', fontSize: 11 }}>
+              {isAutoPlay ? '⏸ Pause' : '▶ Auto-Play'}
+            </button>
           </div>
-          
-          {/* Navigation */}
-          <div className="p-4 md:p-6 flex flex-wrap items-center justify-between gap-4 border-t border-white/10">
-            <div className="flex gap-2">
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 12 }}>
+            <div style={{ backgroundColor: colors.white, borderRadius: 12, boxShadow: '0 4px 20px rgba(0,0,0,0.1)', width: '100%', maxWidth: 480, minHeight: 360, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ flex: 1 }}>{slides[currentSlide]}</div>
+            </div>
+          </div>
+          <div style={{ backgroundColor: colors.white, padding: '10px 16px', borderTop: `1px solid ${colors.neutral200}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <button onClick={prevSlide} style={{ padding: '6px 14px', backgroundColor: colors.white, color: colors.primary, border: `2px solid ${colors.primary}`, borderRadius: 6, fontWeight: 600, cursor: 'pointer', fontSize: 11 }}>← Prev</button>
+            <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
               {slides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentSlide(i)}
-                  className={`w-3 h-3 rounded-full transition-all border-none cursor-pointer ${i === currentSlide ? 'bg-orange-500 scale-125' : 'bg-white/30 hover:bg-white/50'}`}
-                />
+                <button key={i} onClick={() => setCurrentSlide(i)} title={slideNames[i]} style={{ width: i === currentSlide ? 18 : 8, height: 8, borderRadius: 4, backgroundColor: i === currentSlide ? colors.primary : colors.neutral200, border: 'none', cursor: 'pointer', transition: 'all 0.2s' }} />
               ))}
             </div>
-            
-            <div className="flex items-center gap-2 md:gap-4">
-              <button
-                onClick={() => setCurrentSlide(Math.max(0, currentSlide - 1))}
-                disabled={currentSlide === 0}
-                className="px-3 md:px-4 py-2 rounded bg-white/10 hover:bg-white/20 disabled:opacity-30 text-sm cursor-pointer border-none"
-                style={{ color: slide.textColor === 'white' ? 'white' : '#005A78' }}
-              >
-                ← Prev
-              </button>
-              
-              <button
-                onClick={() => setAutoPlay(!autoPlay)}
-                className={`px-3 md:px-4 py-2 rounded text-sm cursor-pointer border-none ${autoPlay ? 'bg-orange-500 text-white' : 'bg-white/10 hover:bg-white/20'}`}
-                style={{ color: autoPlay ? 'white' : (slide.textColor === 'white' ? 'white' : '#005A78') }}
-              >
-                {autoPlay ? '⏸ Pause' : '▶ Auto'}
-              </button>
-              
-              <button
-                onClick={() => setCurrentSlide(Math.min(slides.length - 1, currentSlide + 1))}
-                disabled={currentSlide === slides.length - 1}
-                className="px-3 md:px-4 py-2 rounded bg-white/10 hover:bg-white/20 disabled:opacity-30 text-sm cursor-pointer border-none"
-                style={{ color: slide.textColor === 'white' ? 'white' : '#005A78' }}
-              >
-                Next →
-              </button>
-            </div>
-            
-            <p className="text-sm opacity-50 hidden md:block" style={{ color: slide.textColor === 'white' ? 'white' : '#666' }}>
-              {currentSlide + 1} / {slides.length}
-            </p>
+            <button onClick={nextSlide} style={{ padding: '6px 14px', backgroundColor: colors.primary, color: colors.white, border: 'none', borderRadius: 6, fontWeight: 600, cursor: 'pointer', fontSize: 11 }}>Next →</button>
           </div>
+          <div style={{ textAlign: 'center', padding: '6px 0 10px', color: colors.neutral500, fontSize: 10 }}>{currentSlide + 1} / {totalSlides} — {slideNames[currentSlide]}</div>
         </div>
       );
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<BlueprintExplainer />);
+    ReactDOM.render(<BlueprintExplainer />, document.getElementById('root'));
   </script>
 </body>
 </html>
